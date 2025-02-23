@@ -11,14 +11,42 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as AboutImport } from './routes/about'
+import { Route as TimeTrackingImport } from './routes/time-tracking'
+import { Route as ReportsImport } from './routes/reports'
+import { Route as IncomeExpensesImport } from './routes/income-expenses'
+import { Route as GoalsImport } from './routes/goals'
+import { Route as BudgetsImport } from './routes/budgets'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
 
-const AboutRoute = AboutImport.update({
-  id: '/about',
-  path: '/about',
+const TimeTrackingRoute = TimeTrackingImport.update({
+  id: '/time-tracking',
+  path: '/time-tracking',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ReportsRoute = ReportsImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const IncomeExpensesRoute = IncomeExpensesImport.update({
+  id: '/income-expenses',
+  path: '/income-expenses',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GoalsRoute = GoalsImport.update({
+  id: '/goals',
+  path: '/goals',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const BudgetsRoute = BudgetsImport.update({
+  id: '/budgets',
+  path: '/budgets',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -39,11 +67,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutImport
+    '/budgets': {
+      id: '/budgets'
+      path: '/budgets'
+      fullPath: '/budgets'
+      preLoaderRoute: typeof BudgetsImport
+      parentRoute: typeof rootRoute
+    }
+    '/goals': {
+      id: '/goals'
+      path: '/goals'
+      fullPath: '/goals'
+      preLoaderRoute: typeof GoalsImport
+      parentRoute: typeof rootRoute
+    }
+    '/income-expenses': {
+      id: '/income-expenses'
+      path: '/income-expenses'
+      fullPath: '/income-expenses'
+      preLoaderRoute: typeof IncomeExpensesImport
+      parentRoute: typeof rootRoute
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsImport
+      parentRoute: typeof rootRoute
+    }
+    '/time-tracking': {
+      id: '/time-tracking'
+      path: '/time-tracking'
+      fullPath: '/time-tracking'
+      preLoaderRoute: typeof TimeTrackingImport
       parentRoute: typeof rootRoute
     }
   }
@@ -53,37 +109,76 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/budgets': typeof BudgetsRoute
+  '/goals': typeof GoalsRoute
+  '/income-expenses': typeof IncomeExpensesRoute
+  '/reports': typeof ReportsRoute
+  '/time-tracking': typeof TimeTrackingRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/budgets': typeof BudgetsRoute
+  '/goals': typeof GoalsRoute
+  '/income-expenses': typeof IncomeExpensesRoute
+  '/reports': typeof ReportsRoute
+  '/time-tracking': typeof TimeTrackingRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/budgets': typeof BudgetsRoute
+  '/goals': typeof GoalsRoute
+  '/income-expenses': typeof IncomeExpensesRoute
+  '/reports': typeof ReportsRoute
+  '/time-tracking': typeof TimeTrackingRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths:
+    | '/'
+    | '/budgets'
+    | '/goals'
+    | '/income-expenses'
+    | '/reports'
+    | '/time-tracking'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to:
+    | '/'
+    | '/budgets'
+    | '/goals'
+    | '/income-expenses'
+    | '/reports'
+    | '/time-tracking'
+  id:
+    | '__root__'
+    | '/'
+    | '/budgets'
+    | '/goals'
+    | '/income-expenses'
+    | '/reports'
+    | '/time-tracking'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
+  BudgetsRoute: typeof BudgetsRoute
+  GoalsRoute: typeof GoalsRoute
+  IncomeExpensesRoute: typeof IncomeExpensesRoute
+  ReportsRoute: typeof ReportsRoute
+  TimeTrackingRoute: typeof TimeTrackingRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
+  BudgetsRoute: BudgetsRoute,
+  GoalsRoute: GoalsRoute,
+  IncomeExpensesRoute: IncomeExpensesRoute,
+  ReportsRoute: ReportsRoute,
+  TimeTrackingRoute: TimeTrackingRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,14 +192,30 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/about"
+        "/budgets",
+        "/goals",
+        "/income-expenses",
+        "/reports",
+        "/time-tracking"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/about": {
-      "filePath": "about.tsx"
+    "/budgets": {
+      "filePath": "budgets.tsx"
+    },
+    "/goals": {
+      "filePath": "goals.tsx"
+    },
+    "/income-expenses": {
+      "filePath": "income-expenses.tsx"
+    },
+    "/reports": {
+      "filePath": "reports.tsx"
+    },
+    "/time-tracking": {
+      "filePath": "time-tracking.tsx"
     }
   }
 }
