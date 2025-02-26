@@ -13,10 +13,16 @@ export default function TopNavBar() {
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(false);
   const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(false);
 
-  const openSidebar = () => setIsRightPanelOpen(!isRightPanelOpen);
-  const closeSidebar = () => setIsRightPanelOpen(false);
+  const openRightSidebar = () => {
+    setIsRightPanelOpen(!isRightPanelOpen);
+    setIsLeftPanelOpen(false);
+  }
+  const closeRightSidebar = () => setIsRightPanelOpen(false);
 
-  const openLeftSidebar = () => setIsLeftPanelOpen(!isLeftPanelOpen);
+  const openLeftSidebar = () => {
+    setIsLeftPanelOpen(!isLeftPanelOpen);
+    setIsRightPanelOpen(false)
+  }
   const closeLeftSidebar = () => setIsLeftPanelOpen(false);
 
   // Define menu items for left and right panels using 'to' instead of 'href'
@@ -39,21 +45,21 @@ export default function TopNavBar() {
     <div>
       {/* Top Navigation Bar */}
       <nav
-        className="bg-white py-2 px-4 flex items-center justify-between z-50"
+        className="bg-zinc-50 border-b border-zinc-300 flex items-center justify-between z-50"
         style={{ position: "relative", zIndex: 100 }}
       >
         {/* Left Sidebar Open Button */}
         <button
           onClick={openLeftSidebar}
-          className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 focus:outline-none"
+          className="flex items-center p-3.5 text-zinc-700 hover:bg-zinc-200 active:bg-zinc-300 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
         >
           {isLeftPanelOpen ? <Close /> : <OpenPanelLeft />}
         </button>
 
         {/* Profile Icon / Right Sidebar Open Button */}
         <button
-          onClick={openSidebar}
-          className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 focus:outline-none"
+          onClick={openRightSidebar}
+          className="flex items-center p-3.5 text-zinc-700 hover:bg-zinc-200 active:bg-zinc-300 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
         >
           {isRightPanelOpen ? <Close /> : <UserAvatar />}
         </button>
@@ -68,7 +74,7 @@ export default function TopNavBar() {
             zIndex: 40,
           }}
           onClick={() => {
-            if (isRightPanelOpen) closeSidebar();
+            if (isRightPanelOpen) closeRightSidebar();
             if (isLeftPanelOpen) closeLeftSidebar();
           }}
         ></div>
@@ -77,57 +83,51 @@ export default function TopNavBar() {
       {/* Left Sidebar Content */}
       {isLeftPanelOpen && (
         <aside
-          className="fixed top-[48px] left-0 bottom-0 w-64 bg-white shadow-lg z-50 transform transition-transform duration-300"
+          className="fixed top-[48px] left-0 bottom-0 w-64 bg-zinc-50 shadow-lg z-50 transform transition-transform duration-300"
           style={{
             transform: isLeftPanelOpen ? "translateX(0)" : "translateX(-100%)",
           }}
         >
-          <div className="p-4 space-y-4">
-            <h2 className="text-lg font-bold">Menu</h2>
-            <ul>
-              {leftPanelItems.map((item, index) => (
-                <li key={index}>
-                  <Link
-                    to={item.to} // Use 'to' instead of 'href'
-                    onClick={closeLeftSidebar} // Close the left panel on click
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded [&.active]:font-bold"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ul className="pt-4">
+            {leftPanelItems.map((item, index) => (
+              <li key={index}>
+                <Link
+                  to={item.to} // Use 'to' instead of 'href'
+                  onClick={closeLeftSidebar} // Close the left panel on click
+                  className="block px-4 py-1.5 border-transparent border-l-4 text-sm font-semibold text-zinc-700 hover:bg-zinc-200 [&.active]:bg-zinc-300 [&.active]:border-blue-500 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </aside>
       )}
 
       {/* Right Sidebar Content */}
       {isRightPanelOpen && (
         <aside
-          className="fixed top-[48px] right-0 bottom-0 w-64 bg-white shadow-lg z-50 transform transition-transform duration-300"
+          className="fixed top-[48px] right-0 bottom-0 w-64 bg-zinc-50 shadow-lg z-50 transform transition-transform duration-300"
           style={{
             transform: isRightPanelOpen ? "translateX(0)" : "translateX(100%)",
           }}
         >
-          <div className="p-4 space-y-4">
-            <h2 className="text-lg font-bold">Profile</h2>
-            <ul>
-              {rightPanelItems.map((item, index) => (
-                <li key={index}>
-                  <Link
-                    to={item.to} // Use 'to' instead of 'href'
-                    onClick={closeSidebar} // Close the right panel on click
-                    className={`block px-4 py-2 ${item.label === "Logout"
-                      ? "text-red-500"
-                      : "text-gray-700"
-                      } hover:bg-gray-100 rounded [&.active]:font-bold`}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ul className="pt-4">
+            {rightPanelItems.map((item, index) => (
+              <li key={index}>
+                <Link
+                  to={item.to} // Use 'to' instead of 'href'
+                  onClick={closeRightSidebar} // Close the right panel on click
+                  className={`block px-4 py-1.5 border-transparent border-l-4 text-sm font-semibold ${item.label === "Logout"
+                    ? "text-red-500"
+                    : "text-zinc-700"
+                    } hover:bg-zinc-200 [&.active]:bg-zinc-300 [&.active]:border-blue-500 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500`}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </aside>
       )}
     </div>
