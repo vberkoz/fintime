@@ -11,20 +11,15 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as TimeTrackingImport } from './routes/time-tracking'
 import { Route as ReportsImport } from './routes/reports'
-import { Route as IncomeExpensesImport } from './routes/income-expenses'
+import { Route as IncomeImport } from './routes/income'
 import { Route as GoalsImport } from './routes/goals'
+import { Route as ExpensesImport } from './routes/expenses'
 import { Route as BudgetsImport } from './routes/budgets'
+import { Route as ActivitiesImport } from './routes/activities'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
-
-const TimeTrackingRoute = TimeTrackingImport.update({
-  id: '/time-tracking',
-  path: '/time-tracking',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const ReportsRoute = ReportsImport.update({
   id: '/reports',
@@ -32,9 +27,9 @@ const ReportsRoute = ReportsImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const IncomeExpensesRoute = IncomeExpensesImport.update({
-  id: '/income-expenses',
-  path: '/income-expenses',
+const IncomeRoute = IncomeImport.update({
+  id: '/income',
+  path: '/income',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -44,9 +39,21 @@ const GoalsRoute = GoalsImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ExpensesRoute = ExpensesImport.update({
+  id: '/expenses',
+  path: '/expenses',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const BudgetsRoute = BudgetsImport.update({
   id: '/budgets',
   path: '/budgets',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ActivitiesRoute = ActivitiesImport.update({
+  id: '/activities',
+  path: '/activities',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -67,11 +74,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/activities': {
+      id: '/activities'
+      path: '/activities'
+      fullPath: '/activities'
+      preLoaderRoute: typeof ActivitiesImport
+      parentRoute: typeof rootRoute
+    }
     '/budgets': {
       id: '/budgets'
       path: '/budgets'
       fullPath: '/budgets'
       preLoaderRoute: typeof BudgetsImport
+      parentRoute: typeof rootRoute
+    }
+    '/expenses': {
+      id: '/expenses'
+      path: '/expenses'
+      fullPath: '/expenses'
+      preLoaderRoute: typeof ExpensesImport
       parentRoute: typeof rootRoute
     }
     '/goals': {
@@ -81,11 +102,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GoalsImport
       parentRoute: typeof rootRoute
     }
-    '/income-expenses': {
-      id: '/income-expenses'
-      path: '/income-expenses'
-      fullPath: '/income-expenses'
-      preLoaderRoute: typeof IncomeExpensesImport
+    '/income': {
+      id: '/income'
+      path: '/income'
+      fullPath: '/income'
+      preLoaderRoute: typeof IncomeImport
       parentRoute: typeof rootRoute
     }
     '/reports': {
@@ -95,13 +116,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportsImport
       parentRoute: typeof rootRoute
     }
-    '/time-tracking': {
-      id: '/time-tracking'
-      path: '/time-tracking'
-      fullPath: '/time-tracking'
-      preLoaderRoute: typeof TimeTrackingImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -109,76 +123,84 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/activities': typeof ActivitiesRoute
   '/budgets': typeof BudgetsRoute
+  '/expenses': typeof ExpensesRoute
   '/goals': typeof GoalsRoute
-  '/income-expenses': typeof IncomeExpensesRoute
+  '/income': typeof IncomeRoute
   '/reports': typeof ReportsRoute
-  '/time-tracking': typeof TimeTrackingRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/activities': typeof ActivitiesRoute
   '/budgets': typeof BudgetsRoute
+  '/expenses': typeof ExpensesRoute
   '/goals': typeof GoalsRoute
-  '/income-expenses': typeof IncomeExpensesRoute
+  '/income': typeof IncomeRoute
   '/reports': typeof ReportsRoute
-  '/time-tracking': typeof TimeTrackingRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/activities': typeof ActivitiesRoute
   '/budgets': typeof BudgetsRoute
+  '/expenses': typeof ExpensesRoute
   '/goals': typeof GoalsRoute
-  '/income-expenses': typeof IncomeExpensesRoute
+  '/income': typeof IncomeRoute
   '/reports': typeof ReportsRoute
-  '/time-tracking': typeof TimeTrackingRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/activities'
     | '/budgets'
+    | '/expenses'
     | '/goals'
-    | '/income-expenses'
+    | '/income'
     | '/reports'
-    | '/time-tracking'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/activities'
     | '/budgets'
+    | '/expenses'
     | '/goals'
-    | '/income-expenses'
+    | '/income'
     | '/reports'
-    | '/time-tracking'
   id:
     | '__root__'
     | '/'
+    | '/activities'
     | '/budgets'
+    | '/expenses'
     | '/goals'
-    | '/income-expenses'
+    | '/income'
     | '/reports'
-    | '/time-tracking'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ActivitiesRoute: typeof ActivitiesRoute
   BudgetsRoute: typeof BudgetsRoute
+  ExpensesRoute: typeof ExpensesRoute
   GoalsRoute: typeof GoalsRoute
-  IncomeExpensesRoute: typeof IncomeExpensesRoute
+  IncomeRoute: typeof IncomeRoute
   ReportsRoute: typeof ReportsRoute
-  TimeTrackingRoute: typeof TimeTrackingRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ActivitiesRoute: ActivitiesRoute,
   BudgetsRoute: BudgetsRoute,
+  ExpensesRoute: ExpensesRoute,
   GoalsRoute: GoalsRoute,
-  IncomeExpensesRoute: IncomeExpensesRoute,
+  IncomeRoute: IncomeRoute,
   ReportsRoute: ReportsRoute,
-  TimeTrackingRoute: TimeTrackingRoute,
 }
 
 export const routeTree = rootRoute
@@ -192,30 +214,34 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/activities",
         "/budgets",
+        "/expenses",
         "/goals",
-        "/income-expenses",
-        "/reports",
-        "/time-tracking"
+        "/income",
+        "/reports"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
+    "/activities": {
+      "filePath": "activities.tsx"
+    },
     "/budgets": {
       "filePath": "budgets.tsx"
+    },
+    "/expenses": {
+      "filePath": "expenses.tsx"
     },
     "/goals": {
       "filePath": "goals.tsx"
     },
-    "/income-expenses": {
-      "filePath": "income-expenses.tsx"
+    "/income": {
+      "filePath": "income.tsx"
     },
     "/reports": {
       "filePath": "reports.tsx"
-    },
-    "/time-tracking": {
-      "filePath": "time-tracking.tsx"
     }
   }
 }

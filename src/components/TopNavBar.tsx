@@ -28,8 +28,9 @@ export default function TopNavBar() {
   // Define menu items for left and right panels using 'to' instead of 'href'
   const leftPanelItems: PanelItem[] = [
     { label: "Dashboard", to: "/" },
-    { label: "Income & Expenses", to: "/income-expenses" },
-    { label: "Time Tracking", to: "/time-tracking" },
+    { label: "Income", to: "/income" },
+    { label: "Expenses", to: "/expenses" },
+    { label: "Activities", to: "/activities" },
     { label: "Budgets", to: "/budgets" },
     { label: "Goals", to: "/goals" },
     { label: "Reports", to: "/reports" },
