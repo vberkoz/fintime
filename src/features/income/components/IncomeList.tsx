@@ -1,7 +1,7 @@
 import React from 'react'
 
 import {
-  type Column,
+  // type Column,
   type ColumnDef,
   type ColumnFiltersState,
   type FilterFn,
@@ -21,7 +21,7 @@ import {
   rankItem,
   compareItems,
 } from '@tanstack/match-sorter-utils'
-import { makeData, type Person } from '../services/incomesService'
+import { makeEventData, type IncomeSource } from '../services/incomesService'
 
 declare module '@tanstack/react-table' {
   //add fuzzy filter to the filterFns
@@ -64,41 +64,48 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
 }
 
 export function IncomeList() {
-  const rerender = React.useReducer(() => ({}), {})[1]
-
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = React.useState('')
 
-  const columns = React.useMemo<ColumnDef<Person, any>[]>(() => [
+  const columns = React.useMemo<ColumnDef<IncomeSource, any>[]>(() => [
+    // {
+    //   accessorKey: 'id',
+    //   filterFn: 'equalsString', //note: normal non-fuzzy filter column - exact match required
+    // },
     {
-      accessorKey: 'id',
-      filterFn: 'equalsString', //note: normal non-fuzzy filter column - exact match required
-    },
-    {
-      accessorKey: 'firstName',
+      accessorKey: 'name',
       cell: info => info.getValue(),
       filterFn: 'includesStringSensitive', //note: normal non-fuzzy filter column - case sensitive
     },
     {
-      accessorFn: row => row.lastName,
-      id: 'lastName',
+      accessorFn: row => row.amount,
+      id: 'amount',
       cell: info => info.getValue(),
-      header: () => <span>Last Name</span>,
+      header: () => <span>amount</span>,
       filterFn: 'includesString', //note: normal non-fuzzy filter column - case insensitive
     },
     {
-      accessorFn: row => `${row.firstName} ${row.lastName}`,
-      id: 'fullName',
-      header: 'Full Name',
+      accessorFn: row => row.category,
+      id: 'category',
+      header: 'category',
       cell: info => info.getValue(),
       filterFn: 'fuzzy', //using our custom fuzzy filter function
       // filterFn: fuzzyFilter, //or just define with the function
       sortingFn: fuzzySort, //sort by fuzzy rank (falls back to alphanumeric)
     },
+    {
+      accessorKey: 'date',
+      cell: info => info.getValue(),
+      filterFn: 'includesStringSensitive', //note: normal non-fuzzy filter column - case sensitive
+    },
+    {
+      accessorKey: 'notes',
+      cell: info => info.getValue(),
+      filterFn: 'includesStringSensitive', //note: normal non-fuzzy filter column - case sensitive
+    },
   ], [])
 
-  const [data, setData] = React.useState<Person[]>(() => makeData(5_000))
-  const refreshData = () => setData(_old => makeData(50_000)) //stress test
+  const [data] = React.useState<IncomeSource[]>(() => makeEventData(1_000))
 
   const table = useReactTable({
     data,
@@ -132,7 +139,7 @@ export function IncomeList() {
   }, [table.getState().columnFilters[0]?.id])
 
   return (
-    <div className="p-2">
+    <div className="p-0">
       <div>
         <DebouncedInput
           value={globalFilter ?? ''}
@@ -143,7 +150,7 @@ export function IncomeList() {
       </div>
       <div className="h-2" />
       <table>
-        <thead>
+        {/* <thead>
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => {
@@ -180,7 +187,7 @@ export function IncomeList() {
               })}
             </tr>
           ))}
-        </thead>
+        </thead> */}
         <tbody>
           {table.getRowModel().rows.map(row => {
             return (
@@ -263,39 +270,23 @@ export function IncomeList() {
         </select>
       </div>
       <div>{table.getPrePaginationRowModel().rows.length} Rows</div>
-      <div>
-        <button onClick={() => rerender()}>Force Rerender</button>
-      </div>
-      <div>
-        <button onClick={() => refreshData()}>Refresh Data</button>
-      </div>
-      <pre>
-        {JSON.stringify(
-          {
-            columnFilters: table.getState().columnFilters,
-            globalFilter: table.getState().globalFilter,
-          },
-          null,
-          2
-        )}
-      </pre>
     </div>
   )
 }
 
-function Filter({ column }: { column: Column<any, unknown> }) {
-  const columnFilterValue = column.getFilterValue()
+// function Filter({ column }: { column: Column<any, unknown> }) {
+//   const columnFilterValue = column.getFilterValue()
 
-  return (
-    <DebouncedInput
-      type="text"
-      value={(columnFilterValue ?? '') as string}
-      onChange={value => column.setFilterValue(value)}
-      placeholder={`Search...`}
-      className="w-36 border shadow rounded"
-    />
-  )
-}
+//   return (
+//     <DebouncedInput
+//       type="text"
+//       value={(columnFilterValue ?? '') as string}
+//       onChange={value => column.setFilterValue(value)}
+//       placeholder={`Search...`}
+//       className="w-36 border shadow rounded"
+//     />
+//   )
+// }
 
 // A typical debounced input react component
 function DebouncedInput({

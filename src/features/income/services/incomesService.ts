@@ -1,50 +1,110 @@
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
-export type Person = {
-  id: number
-  firstName: string
-  lastName: string
-  age: number
-  visits: number
-  progress: number
-  status: 'relationship' | 'complicated' | 'single'
-  subRows?: Person[]
-}
+// Define the category types explicitly
+type CategoryType = 
+  | 'Retail Sales'
+  | 'E-commerce'
+  | 'Services'
+  | 'Investments'
+  | 'Partnerships'
+  | 'Freelance'
+  | 'Consulting';
 
-const range = (len: number) => {
-  const arr: number[] = []
-  for (let i = 0; i < len; i++) {
-    arr.push(i)
-  }
-  return arr
-}
+export type IncomeSource = {
+  id: string;
+  name: string;
+  amount: number;
+  category: CategoryType;
+  date: string;
+  notes: string;
+};
 
-const newPerson = (num: number): Person => {
-  return {
-    id: num,
-    firstName: faker.person.firstName(),
-    lastName: faker.person.lastName(),
-    age: faker.number.int(40),
-    visits: faker.number.int(1000),
-    progress: faker.number.int(100),
-    status: faker.helpers.shuffle<Person['status']>([
-      'relationship',
-      'complicated',
-      'single',
-    ])[0]!,
-  }
-}
+export function makeEventData(numEntries: number = 5): any {
+  const categories: CategoryType[] = [
+    'Retail Sales',
+    'E-commerce',
+    'Services',
+    'Investments',
+    'Partnerships',
+    'Freelance',
+    'Consulting'
+  ];
 
-export function makeData(...lens: number[]) {
-  const makeDataLevel = (depth = 0): Person[] => {
-    const len = lens[depth]!
-    return range(len).map((index): Person => {
-      return {
-        ...newPerson(index),
-        subRows: lens[depth + 1] ? makeDataLevel(depth + 1) : undefined,
-      }
-    })
-  }
+  // Predefined names mapped to categories
+  const categoryNames: { [key in CategoryType]: string[] } = {
+    'Retail Sales': [
+      'In-store Sales',
+      'POS Revenue',
+      'Walk-in Customers',
+      'Retail Inventory Sales',
+      'Physical Store Revenue'
+    ],
+    'E-commerce': [
+      'Online Store Sales',
+      'Website Orders',
+      'Digital Marketplace',
+      'Subscription Revenue',
+      'App-Based Sales'
+    ],
+    'Services': [
+      'Consulting Fees',
+      'Service Contracts',
+      'Maintenance Revenue',
+      'Contract Labor',
+      'Support Services'
+    ],
+    'Investments': [
+      'Stock Dividends',
+      'Real Estate Income',
+      'Portfolio Returns',
+      'Cryptocurrency Gains',
+      'Venture Capital'
+    ],
+    'Partnerships': [
+      'Revenue Share',
+      'Joint Venture Profits',
+      'Affiliate Commissions',
+      'Co-Branded Sales',
+      'Strategic Alliances'
+    ],
+    'Freelance': [
+      'Freelance Project Payments',
+      'Contract Work',
+      'Client Retainer',
+      'Gig Economy Income',
+      'Remote Consulting'
+    ],
+    'Consulting': [
+      'Business Strategy Fees',
+      'IT Consulting Revenue',
+      'Legal Consultancy',
+      'Marketing Services',
+      'HR Consulting'
+    ]
+  };
 
-  return makeDataLevel()
+  const generateEventEntry = (index: number): IncomeSource => {
+    const category = faker.helpers.arrayElement(categories);
+    const names = categoryNames[category];
+    const name = faker.helpers.arrayElement(names);
+
+    return {
+      id: `income_${(index + 1).toString().padStart(3, '0')}`,
+      name: name,
+      amount: parseFloat(faker.finance.amount({ 
+        min: 100, 
+        max: 5000
+      })),
+      category: category,
+      date: faker.date.between({ 
+        from: '2023-01-01', 
+        to: '2023-12-31' 
+      }).toISOString().split('T')[0],
+      notes: faker.lorem.sentence()
+    };
+  };
+
+  const incomeSources = Array.from({ length: numEntries }, (_, i) => generateEventEntry(i));
+
+  return incomeSources;
 }
