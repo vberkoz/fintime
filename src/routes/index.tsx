@@ -1,30 +1,38 @@
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+// import { Input } from '@/components/ui/input';
+// import { Label } from '@/components/ui/label';
+import { ActivityForm } from '@/features/activity/components/ActivityForm';
 import { createFileRoute } from '@tanstack/react-router';
-import { EventList } from '../features/event/components/EventList';
-// import { Cards, Expenses, Incomes, Activities, TimeCategories, Deadlines } from '../features/dashboard';
+import { useState } from 'react';
 
 export const Route = createFileRoute('/')({
   component: Index,
 })
 
 function Index() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  function closeDialog(): void {
+    setIsDialogOpen(false);
+  }
+
   return (
-    <div className="space-y-4">
-      <h3 className="text-3xl text-zinc-800 leading-8 mb-4">Events</h3>
-      <EventList />
-
-      {/* <h3 className="text-3xl text-zinc-800 leading-8 mb-4">Dashboard</h3>
-      <Cards />
-      
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-        <Incomes />
-        <Expenses />
-        <TimeCategories />
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-4">
-        <Activities />
-        <Deadlines />
-      </div> */}
+    <div className="flex justify-between space-y-4">
+      <h2 className="text-2xl font-semibold mb-4">Today's Activities</h2>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogTrigger asChild>
+          <Button>Add Activity</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Add Activity</DialogTitle>
+            <DialogDescription>
+              Add your activity info here. Click save when you're done.
+            </DialogDescription>
+          </DialogHeader>
+          <ActivityForm closeDialog={closeDialog}/>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

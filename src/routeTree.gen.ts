@@ -11,49 +11,35 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as ReportsImport } from './routes/reports'
-import { Route as IncomeImport } from './routes/income'
-import { Route as GoalsImport } from './routes/goals'
-import { Route as ExpensesImport } from './routes/expenses'
-import { Route as BudgetsImport } from './routes/budgets'
-import { Route as ActivitiesImport } from './routes/activities'
+import { Route as SettingsImport } from './routes/settings'
+import { Route as ProfileImport } from './routes/profile'
+import { Route as MonthlyImport } from './routes/monthly'
+import { Route as CategoriesImport } from './routes/categories'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
 
-const ReportsRoute = ReportsImport.update({
-  id: '/reports',
-  path: '/reports',
+const SettingsRoute = SettingsImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRoute,
 } as any)
 
-const IncomeRoute = IncomeImport.update({
-  id: '/income',
-  path: '/income',
+const ProfileRoute = ProfileImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRoute,
 } as any)
 
-const GoalsRoute = GoalsImport.update({
-  id: '/goals',
-  path: '/goals',
+const MonthlyRoute = MonthlyImport.update({
+  id: '/monthly',
+  path: '/monthly',
   getParentRoute: () => rootRoute,
 } as any)
 
-const ExpensesRoute = ExpensesImport.update({
-  id: '/expenses',
-  path: '/expenses',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const BudgetsRoute = BudgetsImport.update({
-  id: '/budgets',
-  path: '/budgets',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ActivitiesRoute = ActivitiesImport.update({
-  id: '/activities',
-  path: '/activities',
+const CategoriesRoute = CategoriesImport.update({
+  id: '/categories',
+  path: '/categories',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -74,46 +60,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/activities': {
-      id: '/activities'
-      path: '/activities'
-      fullPath: '/activities'
-      preLoaderRoute: typeof ActivitiesImport
+    '/categories': {
+      id: '/categories'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof CategoriesImport
       parentRoute: typeof rootRoute
     }
-    '/budgets': {
-      id: '/budgets'
-      path: '/budgets'
-      fullPath: '/budgets'
-      preLoaderRoute: typeof BudgetsImport
+    '/monthly': {
+      id: '/monthly'
+      path: '/monthly'
+      fullPath: '/monthly'
+      preLoaderRoute: typeof MonthlyImport
       parentRoute: typeof rootRoute
     }
-    '/expenses': {
-      id: '/expenses'
-      path: '/expenses'
-      fullPath: '/expenses'
-      preLoaderRoute: typeof ExpensesImport
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileImport
       parentRoute: typeof rootRoute
     }
-    '/goals': {
-      id: '/goals'
-      path: '/goals'
-      fullPath: '/goals'
-      preLoaderRoute: typeof GoalsImport
-      parentRoute: typeof rootRoute
-    }
-    '/income': {
-      id: '/income'
-      path: '/income'
-      fullPath: '/income'
-      preLoaderRoute: typeof IncomeImport
-      parentRoute: typeof rootRoute
-    }
-    '/reports': {
-      id: '/reports'
-      path: '/reports'
-      fullPath: '/reports'
-      preLoaderRoute: typeof ReportsImport
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsImport
       parentRoute: typeof rootRoute
     }
   }
@@ -123,84 +95,52 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/activities': typeof ActivitiesRoute
-  '/budgets': typeof BudgetsRoute
-  '/expenses': typeof ExpensesRoute
-  '/goals': typeof GoalsRoute
-  '/income': typeof IncomeRoute
-  '/reports': typeof ReportsRoute
+  '/categories': typeof CategoriesRoute
+  '/monthly': typeof MonthlyRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/activities': typeof ActivitiesRoute
-  '/budgets': typeof BudgetsRoute
-  '/expenses': typeof ExpensesRoute
-  '/goals': typeof GoalsRoute
-  '/income': typeof IncomeRoute
-  '/reports': typeof ReportsRoute
+  '/categories': typeof CategoriesRoute
+  '/monthly': typeof MonthlyRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/activities': typeof ActivitiesRoute
-  '/budgets': typeof BudgetsRoute
-  '/expenses': typeof ExpensesRoute
-  '/goals': typeof GoalsRoute
-  '/income': typeof IncomeRoute
-  '/reports': typeof ReportsRoute
+  '/categories': typeof CategoriesRoute
+  '/monthly': typeof MonthlyRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/activities'
-    | '/budgets'
-    | '/expenses'
-    | '/goals'
-    | '/income'
-    | '/reports'
+  fullPaths: '/' | '/categories' | '/monthly' | '/profile' | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/activities'
-    | '/budgets'
-    | '/expenses'
-    | '/goals'
-    | '/income'
-    | '/reports'
-  id:
-    | '__root__'
-    | '/'
-    | '/activities'
-    | '/budgets'
-    | '/expenses'
-    | '/goals'
-    | '/income'
-    | '/reports'
+  to: '/' | '/categories' | '/monthly' | '/profile' | '/settings'
+  id: '__root__' | '/' | '/categories' | '/monthly' | '/profile' | '/settings'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ActivitiesRoute: typeof ActivitiesRoute
-  BudgetsRoute: typeof BudgetsRoute
-  ExpensesRoute: typeof ExpensesRoute
-  GoalsRoute: typeof GoalsRoute
-  IncomeRoute: typeof IncomeRoute
-  ReportsRoute: typeof ReportsRoute
+  CategoriesRoute: typeof CategoriesRoute
+  MonthlyRoute: typeof MonthlyRoute
+  ProfileRoute: typeof ProfileRoute
+  SettingsRoute: typeof SettingsRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ActivitiesRoute: ActivitiesRoute,
-  BudgetsRoute: BudgetsRoute,
-  ExpensesRoute: ExpensesRoute,
-  GoalsRoute: GoalsRoute,
-  IncomeRoute: IncomeRoute,
-  ReportsRoute: ReportsRoute,
+  CategoriesRoute: CategoriesRoute,
+  MonthlyRoute: MonthlyRoute,
+  ProfileRoute: ProfileRoute,
+  SettingsRoute: SettingsRoute,
 }
 
 export const routeTree = rootRoute
@@ -214,34 +154,26 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/activities",
-        "/budgets",
-        "/expenses",
-        "/goals",
-        "/income",
-        "/reports"
+        "/categories",
+        "/monthly",
+        "/profile",
+        "/settings"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/activities": {
-      "filePath": "activities.tsx"
+    "/categories": {
+      "filePath": "categories.tsx"
     },
-    "/budgets": {
-      "filePath": "budgets.tsx"
+    "/monthly": {
+      "filePath": "monthly.tsx"
     },
-    "/expenses": {
-      "filePath": "expenses.tsx"
+    "/profile": {
+      "filePath": "profile.tsx"
     },
-    "/goals": {
-      "filePath": "goals.tsx"
-    },
-    "/income": {
-      "filePath": "income.tsx"
-    },
-    "/reports": {
-      "filePath": "reports.tsx"
+    "/settings": {
+      "filePath": "settings.tsx"
     }
   }
 }
