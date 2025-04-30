@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { getLocalISOStringWithoutSeconds } from "@/lib/utils"
-import { ActivitySchema } from "../types"
+import { ActivitySchema, type Activity } from "../types"
+import { useCreateActivity } from "../hooks/useCreateActivity"
 
 const FieldInfo = ({ field }: { field: AnyFieldApi }) => {
   return (
@@ -36,9 +37,16 @@ const ACTIVITY_CATEGORIES = [
   "household",
 ]
 
-export const ActivityForm = ({ closeDialog }: { closeDialog: () => void }) => {
+interface ItemFormProps {
+  defaultValues?: Activity; // Optional for editing
+  onClose: () => void;
+}
+
+export const ActivityForm = ({ defaultValues, onClose }: ItemFormProps) => {
+  const createActivity = useCreateActivity();
+
   const form = useForm({
-    defaultValues: {
+    defaultValues: defaultValues || {
       activityCategory: '',
       activityName: '',
       fundsDirection: 'expense',
@@ -51,9 +59,8 @@ export const ActivityForm = ({ closeDialog }: { closeDialog: () => void }) => {
       onSubmit: ActivitySchema,
     },
     onSubmit: async ({ value }) => {
-      // Do something with form data
-      console.log(value);
-      closeDialog();
+      await createActivity.mutateAsync(value)
+      onClose();
     },
   })
 

@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { ActivityForm } from '@/features/activity/components/ActivityForm';
 import ActivityList from '@/features/activity/components/ActivityList';
+import type { Activity } from '@/features/activity/types';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
@@ -11,8 +12,11 @@ export const Route = createFileRoute('/')({
 
 function Index() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  function closeDialog(): void {
-    setIsDialogOpen(false);
+  const [selectedItem, setSelectedItem] = useState<Activity | null>(null);
+
+  const handleEditItem = (item: Activity) => {
+    setSelectedItem(item);
+    setIsDialogOpen(true);
   }
 
   return (
@@ -30,11 +34,14 @@ function Index() {
                 Add your activity info here. Click save when you're done.
               </DialogDescription>
             </DialogHeader>
-            <ActivityForm closeDialog={closeDialog} />
+            <ActivityForm
+              defaultValues={selectedItem || undefined}
+              onClose={() => setIsDialogOpen(false)}
+            />
           </DialogContent>
         </Dialog>
       </div>
-      <ActivityList />
+      <ActivityList onEdit={handleEditItem} />
     </div>
   )
 }
