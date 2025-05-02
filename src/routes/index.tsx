@@ -1,47 +1,77 @@
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { ActivityForm } from '@/features/activity/components/ActivityForm';
-import ActivityList from '@/features/activity/components/ActivityList';
-import type { Activity } from '@/features/activity/types';
-import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { ActivityForm } from "@/features/activity/components/ActivityForm";
+import ActivityList from "@/features/activity/components/ActivityList";
+import type { Activity } from "@/features/activity/types";
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 
-export const Route = createFileRoute('/')({
-  component: Index,
-})
+export const Route = createFileRoute("/")({
+    component: Index,
+});
 
 function Index() {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<Activity | null>(null);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<Activity | null>(null);
+    const [selectedDay, setSelectedDay] = useState(new Date().toISOString().split('T')[0]);
 
-  const handleEditItem = (item: Activity) => {
-    setSelectedItem(item);
-    setIsDialogOpen(true);
-  }
+    const handleEditItem = (item: Activity) => {
+        setSelectedItem(item);
+        setIsDialogOpen(true);
+    };
 
-  return (
-    <div>
-      <div className="flex justify-between space-y-4">
-        <h2 className="text-2xl font-semibold mb-4">Today's Activities</h2>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>Add Activity</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Add Activity</DialogTitle>
-              <DialogDescription>
-                Add your activity info here. Click save when you're done.
-              </DialogDescription>
-            </DialogHeader>
-            <ActivityForm
-              defaultValues={selectedItem || undefined}
-              onClose={() => setIsDialogOpen(false)}
+    const handleDayPick = (day: string) => {
+        setSelectedDay(day);
+    };
+
+    return (
+        <div>
+            <div className="flex justify-between space-y-4">
+                <h2 className="text-2xl font-semibold mb-4">
+                    Daily Activities
+                </h2>
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <div className="flex">
+                    <Input
+                        id="daypicker"
+                        name="daypicker"
+                        type="date"
+                        value={selectedDay}
+                        onChange={(e) => handleDayPick(e.target.value)}
+                        className="w-fit mr-2"
+                    />
+                    <DialogTrigger asChild>
+                        <Button>Add Activity</Button>
+                    </DialogTrigger>
+                    </div>
+                    <DialogContent className="sm:max-w-[425px]">
+                        <DialogHeader>
+                            <DialogTitle>Add Activity</DialogTitle>
+                            <DialogDescription>
+                                Add your activity info here. Click save when
+                                you're done.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <ActivityForm
+                            defaultValues={selectedItem || undefined}
+                            onClose={() => setIsDialogOpen(false)}
+                            selectedDay={selectedDay}
+                        />
+                    </DialogContent>
+                </Dialog>
+            </div>
+            <ActivityList
+                onEdit={handleEditItem}
+                selectedDay={selectedDay}
             />
-          </DialogContent>
-        </Dialog>
-      </div>
-      <ActivityList onEdit={handleEditItem} />
-    </div>
-  )
+        </div>
+    );
 }

@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import { useRemoveActivity } from "../hooks/useRemoveActivity";
 
-interface ItemListProps {
+interface ActivityListProps {
   // items: Item[];
   onEdit: (item: Activity) => void;
+  selectedDay: string;
 }
 
 const columnHelper = createColumnHelper<Activity>();
@@ -45,8 +46,8 @@ const columns = [
   }),
 ];
 
-export default function ActivityList({ onEdit }: ItemListProps) {
-  const { data: activities, isLoading } = useActivities();
+export default function ActivityList({ onEdit, selectedDay }: ActivityListProps) {
+  const { data: activities, isLoading } = useActivities(selectedDay);
 
   const table = useReactTable({
     data: activities || [],
@@ -60,7 +61,14 @@ export default function ActivityList({ onEdit }: ItemListProps) {
     await removeActivity.mutateAsync(endDate)
   }
 
-  if (isLoading) "Loading...";
+  if (isLoading) {
+    return <div className="text-center py-4">Loading...</div>;
+  }
+
+  // Simplified check for empty activities
+  if (!activities || activities.length === 0) {
+    return <div className="text-center py-4">No activities for this day</div>;
+  }
 
   return (
     <div className="w-full space-y-4">
@@ -71,10 +79,16 @@ export default function ActivityList({ onEdit }: ItemListProps) {
             <div className="self-center">{row.original.activityCategory}</div>
             <div className="self-center">{row.original.activityName}</div>
             <div className="self-center">{row.original.activityNotes}</div>
-            <div className={`${row.original.fundsDirection === "expense" ? "text-red-600" : "text-green-600"} self-center text-right`}>
-              {row.original.fundsDirection === "expense" ? "-$ " : "$ "}
-              {row.original.fundsAmount}
-            </div>
+            {!row.original.fundsAmount ?
+              <div className="self-center text-right text-zinc-700">
+                $0.00
+              </div>
+              :
+              <div className={`${row.original.fundsDirection === "expense" ? "text-red-600" : "text-green-600"} self-center text-right`}>
+                {row.original.fundsDirection === "expense" ? "-$" : "$"}
+                {row.original.fundsAmount}
+              </div>
+            }
             <div className="text-right self-center">
               <Button disabled variant="ghost" className="h-8 w-8 p-0" onClick={() => onEdit({
                 activityCategory: row.original.activityCategory,
@@ -95,8 +109,7 @@ export default function ActivityList({ onEdit }: ItemListProps) {
             </div>
           </CardContent>
         </Card>
-      )
-      )}
+      ))}
     </div>
   );
 }

@@ -5,8 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function getLocalISOStringWithoutSeconds() {
-  const now = new Date();
+export function getLocalISOStringWithoutSeconds(date: string) {
+  const now = new Date(date);
   const pad = (n: number) => String(n).padStart(2, '0');
 
   const year = now.getFullYear();

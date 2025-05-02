@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label"
 import { getLocalISOStringWithoutSeconds } from "@/lib/utils"
 import { ActivitySchema, type Activity } from "../types"
 import { useCreateActivity } from "../hooks/useCreateActivity"
+import { useActivities } from "../hooks/useActivities"
+import { useEffect, useState } from "react"
 
 const FieldInfo = ({ field }: { field: AnyFieldApi }) => {
   return (
@@ -40,10 +42,57 @@ const ACTIVITY_CATEGORIES = [
 interface ItemFormProps {
   defaultValues?: Activity; // Optional for editing
   onClose: () => void;
+  selectedDay: string;
 }
 
-export const ActivityForm = ({ defaultValues, onClose }: ItemFormProps) => {
+export const ActivityForm = ({ defaultValues, onClose, selectedDay }: ItemFormProps) => {
   const createActivity = useCreateActivity();
+  const { data: activities } = useActivities(selectedDay);
+  const [initialDates, setInitialDates] = useState({
+    beginDate: getLocalISOStringWithoutSeconds(selectedDay),
+    endDate: getLocalISOStringWithoutSeconds(selectedDay)
+  });
+
+  useEffect(() => {
+    // Check if we're editing an existing activity
+    if (defaultValues) {
+      return;
+    }
+
+    // Get current date in YYYY-MM-DD format for comparison
+    const today = new Date().toISOString().split('T')[0];
+    const isToday = selectedDay === today;
+    
+    // Current datetime for today's activities
+    const currentDateTime = getLocalISOStringWithoutSeconds(new Date().toISOString());
+    
+    // Default values if no activities exist
+    let beginDateTime = isToday ? currentDateTime : `${selectedDay}T00:00`;
+    let endDateTime = isToday ? currentDateTime : `${selectedDay}T00:00`;
+    
+    // If activities exist, find the latest one
+    if (activities && Array.isArray(activities) && activities.length > 0) {
+      // Sort activities by endDate in descending order
+      const sortedActivities = [...activities].sort((a, b) => 
+        new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
+      );
+      
+      // Get the latest activity's endDate
+      const latestEndDate = sortedActivities[0].endDate;
+      
+      // Set beginDate to the latest activity's endDate
+      beginDateTime = latestEndDate;
+      
+      // For today, set endDate to current time
+      // For other days, set endDate to the same as beginDate
+      endDateTime = isToday ? currentDateTime : latestEndDate;
+    }
+    
+    setInitialDates({
+      beginDate: beginDateTime,
+      endDate: endDateTime
+    });
+  }, [activities, defaultValues, selectedDay]);
 
   const form = useForm({
     defaultValues: defaultValues || {
@@ -51,8 +100,8 @@ export const ActivityForm = ({ defaultValues, onClose }: ItemFormProps) => {
       activityName: '',
       fundsDirection: 'expense',
       fundsAmount: '',
-      beginDate: getLocalISOStringWithoutSeconds(),
-      endDate: getLocalISOStringWithoutSeconds(),
+      beginDate: initialDates.beginDate,
+      endDate: initialDates.endDate,
       activityNotes: '',
     },
     validators: {
@@ -63,6 +112,14 @@ export const ActivityForm = ({ defaultValues, onClose }: ItemFormProps) => {
       onClose();
     },
   })
+
+  // Update form values when initialDates change
+  useEffect(() => {
+    if (!defaultValues) {
+      form.setFieldValue('beginDate', initialDates.beginDate);
+      form.setFieldValue('endDate', initialDates.endDate);
+    }
+  }, [initialDates, form, defaultValues]);
 
   return (
     <form
