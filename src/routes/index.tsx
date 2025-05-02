@@ -34,8 +34,8 @@ function Index() {
 
     return (
         <div>
-            <div className="flex justify-between space-y-4">
-                <h2 className="text-2xl font-semibold mb-4">
+            <div className="flex flex-col sm:flex-row justify-between space-y-4 mb-4">
+                <h2 className="text-2xl font-semibold">
                     Daily Activities
                 </h2>
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
