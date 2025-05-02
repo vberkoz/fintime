@@ -9,9 +9,10 @@ import { useRemoveActivity } from "../hooks/useRemoveActivity";
 import { calculateDuration } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { NotesExpandButton } from "@/components/NotesExpandButton";
 
 interface ActivityListProps {
-  // items: Item[];
   onEdit: (item: Activity) => void;
   selectedDay: string;
 }
@@ -19,38 +20,30 @@ interface ActivityListProps {
 const columnHelper = createColumnHelper<Activity>();
 
 const columns = [
-  // columnHelper.accessor("beginDate", {
-  //   header: () => <span>Start</span>,
-  //   cell: (info) => info.getValue(),
-  // }),
-  // columnHelper.accessor("endDate", {
-  //   header: () => <span>End</span>,
-  //   cell: (info) => info.getValue(),
-  // }),
   columnHelper.accessor("activityCategory", {
     header: () => <span>Category</span>,
-    // cell: (info) => info.getValue(),
   }),
   columnHelper.accessor("activityName", {
     header: () => <span>Activity</span>,
-    // cell: (info) => info.getValue(),
   }),
-  // columnHelper.accessor("fundsDirection", {
-  //   header: () => <span>Direction</span>,
-  //   cell: (info) => info.getValue(),
-  // }),
   columnHelper.accessor("fundsAmount", {
     header: () => <span>Amount</span>,
-    // cell: (info) => `$${info.getValue()}`,
   }),
   columnHelper.accessor("activityNotes", {
     header: () => <span>Notes</span>,
-    // cell: (info) => info.getValue(),
   }),
 ];
 
 export default function ActivityList({ onEdit, selectedDay }: ActivityListProps) {
   const { data: activities, isLoading } = useActivities(selectedDay);
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+
+  const toggleExpanded = (id: string) => {
+    setExpandedItems(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
 
   const table = useReactTable({
     data: activities || [],
@@ -68,7 +61,6 @@ export default function ActivityList({ onEdit, selectedDay }: ActivityListProps)
     return <div className="text-center py-4">Loading...</div>;
   }
 
-  // Simplified check for empty activities
   if (!activities || activities.length === 0) {
     return <div className="text-center py-4">No activities for this day</div>;
   }
@@ -76,6 +68,7 @@ export default function ActivityList({ onEdit, selectedDay }: ActivityListProps)
   return (
     <div className="w-full space-y-4 max-w-5xl mx-auto">
       {table.getRowModel().rows.map((row) => {
+        const isExpanded = expandedItems[row.id] || false;
         const startTime = new Date(row.original.beginDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         const endTime = new Date(row.original.endDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         const duration = calculateDuration(row.original.beginDate, row.original.endDate);
@@ -103,9 +96,15 @@ export default function ActivityList({ onEdit, selectedDay }: ActivityListProps)
             </CardHeader>
 
             <CardContent className="px-4 pb-4">
-              <div className="text-sm text-muted-foreground whitespace-pre-wrap">
+              <div id={`notes-${row.id}`} className={`text-sm text-muted-foreground whitespace-pre-wrap ${isExpanded ? "" : "line-clamp-2 sm:line-clamp-3"}`}>
                 {notes}
               </div>
+              <NotesExpandButton 
+                text={notes} 
+                rowId={row.id} 
+                isExpanded={isExpanded} 
+                onToggle={() => toggleExpanded(row.id)} 
+              />
             </CardContent>
 
             <Separator />
