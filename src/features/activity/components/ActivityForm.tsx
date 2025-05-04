@@ -108,10 +108,28 @@ export const ActivityForm = ({ defaultValues, onClose, selectedDay }: ItemFormPr
       onSubmit: ActivitySchema,
     },
     onSubmit: async ({ value }) => {
-      await createActivity.mutateAsync(value)
+      await createActivity.mutateAsync(value);
+      form.reset();
       onClose();
     },
-  })
+  });
+
+  // Reset form when defaultValues change (including when they're cleared)
+  useEffect(() => {
+    if (defaultValues) {
+      form.reset(defaultValues);
+    } else {
+      form.reset({
+        activityCategory: '',
+        activityName: '',
+        fundsDirection: 'expense',
+        fundsAmount: '',
+        beginDate: getLocalISOStringWithoutSeconds(selectedDay),
+        endDate: getLocalISOStringWithoutSeconds(selectedDay),
+        activityNotes: '',
+      });
+    }
+  }, [defaultValues, form, selectedDay]);
 
   // Update form values when initialDates change
   useEffect(() => {

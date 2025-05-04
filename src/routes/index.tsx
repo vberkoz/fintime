@@ -21,7 +21,9 @@ export const Route = createFileRoute("/")({
 function Index() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<Activity | null>(null);
-    const [selectedDay, setSelectedDay] = useState(new Date().toISOString().split('T')[0]);
+    const [selectedDay, setSelectedDay] = useState(
+        new Date().toISOString().split("T")[0]
+    );
 
     const handleEditItem = (item: Activity) => {
         setSelectedItem(item);
@@ -32,25 +34,28 @@ function Index() {
         setSelectedDay(day);
     };
 
+    const handleCloseForm = () => {
+        setIsDialogOpen(false);
+        setSelectedItem(null);
+    };
+
     return (
         <div>
             <div className="flex flex-col sm:flex-row justify-between space-y-4 mb-4">
-                <h2 className="text-2xl font-semibold">
-                    Daily Activities
-                </h2>
+                <h2 className="text-2xl font-semibold">Daily Activities</h2>
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <div className="flex">
-                    <Input
-                        id="daypicker"
-                        name="daypicker"
-                        type="date"
-                        value={selectedDay}
-                        onChange={(e) => handleDayPick(e.target.value)}
-                        className="w-fit mr-2"
-                    />
-                    <DialogTrigger asChild>
-                        <Button>Add Activity</Button>
-                    </DialogTrigger>
+                        <Input
+                            id="daypicker"
+                            name="daypicker"
+                            type="date"
+                            value={selectedDay}
+                            onChange={(e) => handleDayPick(e.target.value)}
+                            className="w-fit mr-2"
+                        />
+                        <DialogTrigger asChild>
+                            <Button onClick={() => setSelectedItem(null)}>Add Activity</Button>
+                        </DialogTrigger>
                     </div>
                     <DialogContent className="sm:max-w-[425px]">
                         <DialogHeader>
@@ -62,16 +67,13 @@ function Index() {
                         </DialogHeader>
                         <ActivityForm
                             defaultValues={selectedItem || undefined}
-                            onClose={() => setIsDialogOpen(false)}
+                            onClose={handleCloseForm}
                             selectedDay={selectedDay}
                         />
                     </DialogContent>
                 </Dialog>
             </div>
-            <ActivityList
-                onEdit={handleEditItem}
-                selectedDay={selectedDay}
-            />
+            <ActivityList onEdit={handleEditItem} selectedDay={selectedDay} />
         </div>
     );
 }
