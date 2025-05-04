@@ -72,7 +72,7 @@ export default function ActivityList({ onEdit, selectedDay }: ActivityListProps)
         const startTime = new Date(row.original.beginDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         const endTime = new Date(row.original.endDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         const duration = calculateDuration(row.original.beginDate, row.original.endDate);
-        const notes = row.original.activityNotes || "—";
+        const notes = row.original.activityNotes;
         
         return (
           <Card key={row.id} className="w-full py-2 mb-4 overflow-hidden transition-all hover:shadow-md gap-0">
@@ -84,18 +84,14 @@ export default function ActivityList({ onEdit, selectedDay }: ActivityListProps)
                 <h3 className="font-medium text-sm sm:text-base line-clamp-2">{row.original.activityName}</h3>
               </div>
               <div className="text-right">
-                {!row.original.fundsAmount ? (
-                  <p className="text-sm font-semibold text-zinc-700">$0.00</p>
-                ) : (
-                  <p className={`text-sm font-semibold ${row.original.fundsDirection === "expense" ? "text-red-600" : "text-green-600"}`}>
-                    {row.original.fundsDirection === "expense" ? "-$" : "$"}
-                    {row.original.fundsAmount}
-                  </p>
-                )}
+                {row.original.fundsAmount && <p className={`text-sm font-semibold ${row.original.fundsDirection === "expense" ? "text-red-600" : "text-green-600"}`}>
+                  {row.original.fundsDirection === "expense" ? "-$" : "$"}
+                  {row.original.fundsAmount}
+                </p>}
               </div>
             </CardHeader>
 
-            <CardContent className="px-4 pb-4">
+            {notes && <CardContent className="px-4 pb-4">
               <div id={`notes-${row.id}`} className={`text-sm text-muted-foreground whitespace-pre-wrap ${isExpanded ? "" : "line-clamp-2 sm:line-clamp-3"}`}>
                 {notes}
               </div>
@@ -105,7 +101,7 @@ export default function ActivityList({ onEdit, selectedDay }: ActivityListProps)
                 isExpanded={isExpanded} 
                 onToggle={() => toggleExpanded(row.id)} 
               />
-            </CardContent>
+            </CardContent>}
 
             <Separator />
 
