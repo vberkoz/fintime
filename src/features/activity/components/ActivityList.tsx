@@ -85,7 +85,7 @@ export default function ActivityList({ onEdit, selectedDay }: ActivityListProps)
               </div>
               <div className="text-right">
                 {row.original.fundsAmount && <p className={`text-sm font-semibold ${row.original.fundsDirection === "expense" ? "text-red-600" : "text-green-600"}`}>
-                  {row.original.fundsDirection === "expense" ? "-$" : "$"}
+                  {row.original.fundsDirection === "expense" ? "-" : "+"}
                   {row.original.fundsAmount}
                 </p>}
               </div>
