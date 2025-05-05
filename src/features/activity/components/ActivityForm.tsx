@@ -11,6 +11,7 @@ import { ActivitySchema, type Activity } from "../types"
 import { useCreateActivity } from "../hooks/useCreateActivity"
 import { useActivities } from "../hooks/useActivities"
 import { useEffect, useState } from "react"
+import { useRemoveActivity } from "../hooks/useRemoveActivity"
 
 const FieldInfo = ({ field }: { field: AnyFieldApi }) => {
   return (
@@ -47,6 +48,7 @@ interface ItemFormProps {
 
 export const ActivityForm = ({ defaultValues, onClose, selectedDay }: ItemFormProps) => {
   const createActivity = useCreateActivity();
+  const removeActivity = useRemoveActivity();
   const { data: activities } = useActivities(selectedDay);
   const [initialDates, setInitialDates] = useState({
     beginDate: getLocalISOStringWithoutSeconds(selectedDay),
@@ -108,6 +110,9 @@ export const ActivityForm = ({ defaultValues, onClose, selectedDay }: ItemFormPr
       onSubmit: ActivitySchema,
     },
     onSubmit: async ({ value }) => {
+      if (defaultValues && defaultValues.endDate) {
+        await removeActivity.mutateAsync(defaultValues.endDate);
+      }
       await createActivity.mutateAsync(value);
       form.reset();
       onClose();
