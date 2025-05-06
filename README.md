@@ -25,7 +25,7 @@ FinTime is a web application designed to help users manage their financial activ
 
 1. Clone the repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/vberkoz/fintime-app.git
 cd fintime-app
 ```
 
