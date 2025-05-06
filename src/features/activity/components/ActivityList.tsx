@@ -6,7 +6,7 @@ import type { Activity } from "../types";
 import { Button } from "@/components/ui/button";
 import { Clock, Pencil, Trash2 } from "lucide-react";
 import { useRemoveActivity } from "../hooks/useRemoveActivity";
-import { calculateDuration } from "@/lib/utils";
+import { calculateDuration } from "@/lib/calculateDuration";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
@@ -34,7 +34,7 @@ const columns = [
   }),
 ];
 
-export default function ActivityList({ onEdit, selectedDay }: ActivityListProps) {
+export function ActivityList({ onEdit, selectedDay }: ActivityListProps) {
   const { data: activities, isLoading } = useActivities(selectedDay);
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
 

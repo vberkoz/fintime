@@ -8,8 +8,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { ActivityForm } from "@/features/activity/components/ActivityForm";
-import ActivityList from "@/features/activity/components/ActivityList";
+import { ActivityForm, ActivityList } from "@/features/activity";
 import type { Activity } from "@/features/activity/types";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
