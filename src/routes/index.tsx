@@ -8,8 +8,8 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { ActivityForm, ActivityList } from "@/features/activity";
-import type { Activity } from "@/features/activity/types";
+import { ActivityForm, ActivityList } from "@/modules/activities";
+import type { Activity } from "@/modules/activities/types";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
@@ -18,11 +18,11 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+    const date = new Date().toLocaleDateString('en-CA'); // Returns YYYY-MM-DD format
+    
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<Activity | null>(null);
-    const [selectedDay, setSelectedDay] = useState(
-        new Date().toISOString().split("T")[0]
-    );
+    const [selectedDay, setSelectedDay] = useState(date);
 
     const handleEditItem = (item: Activity) => {
         setSelectedItem(item);

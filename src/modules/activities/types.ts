@@ -8,6 +8,7 @@ export const ActivitySchema = z.object({
   beginDate: z.string(),
   endDate: z.string(),
   activityNotes: z.string(),
+  activityId: z.string(),
 })
 
 export type Activity = z.infer<typeof ActivitySchema>;
