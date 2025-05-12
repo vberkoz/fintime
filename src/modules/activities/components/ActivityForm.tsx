@@ -105,13 +105,14 @@ export const ActivityForm = ({ defaultValues, onClose, selectedDay }: ItemFormPr
       beginDate: initialDates.beginDate,
       endDate: initialDates.endDate,
       activityNotes: '',
+      activityId: '',
     },
     validators: {
       onSubmit: ActivitySchema,
     },
     onSubmit: async ({ value }) => {
       if (defaultValues && defaultValues.endDate) {
-        await removeActivity.mutateAsync(defaultValues.endDate);
+        await removeActivity.mutateAsync({ endDate: defaultValues.endDate, activityId: defaultValues.activityId });
       }
       await createActivity.mutateAsync(value);
       form.reset();
@@ -132,6 +133,7 @@ export const ActivityForm = ({ defaultValues, onClose, selectedDay }: ItemFormPr
         beginDate: getLocalISOStringWithoutSeconds(selectedDay),
         endDate: getLocalISOStringWithoutSeconds(selectedDay),
         activityNotes: '',
+        activityId: '',
       });
     }
   }, [defaultValues, form, selectedDay]);

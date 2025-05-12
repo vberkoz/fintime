@@ -53,8 +53,8 @@ export function ActivityList({ onEdit, selectedDay }: ActivityListProps) {
 
   const removeActivity = useRemoveActivity();
 
-  const onRemove = async (endDate: string) => {
-    await removeActivity.mutateAsync(endDate)
+  const onRemove = async (endDate: string, activityId: string) => {
+    await removeActivity.mutateAsync({ endDate, activityId })
   }
 
   if (isLoading) {
@@ -73,6 +73,7 @@ export function ActivityList({ onEdit, selectedDay }: ActivityListProps) {
         const endTime = new Date(row.original.endDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         const duration = calculateDuration(row.original.beginDate, row.original.endDate);
         const notes = row.original.activityNotes;
+        const activityId = row.original.activityId;
         
         return (
           <Card key={row.id} className="w-full py-2 mb-4 overflow-hidden transition-all hover:shadow-md gap-0">
@@ -113,6 +114,8 @@ export function ActivityList({ onEdit, selectedDay }: ActivityListProps) {
                 </span>
                 <span className="mx-2">•</span>
                 <span>{duration}</span>
+                <span className="mx-2">•</span>
+                <span>{activityId}</span>
               </div>
               <div className="flex items-center gap-2 w-auto justify-end">
                 <Button 
@@ -127,6 +130,7 @@ export function ActivityList({ onEdit, selectedDay }: ActivityListProps) {
                     beginDate: row.original.beginDate,
                     endDate: row.original.endDate,
                     activityNotes: row.original.activityNotes,
+                    activityId: row.original.activityId,
                   })}
                 >
                   <Pencil className="h-4 w-4" />
@@ -136,7 +140,7 @@ export function ActivityList({ onEdit, selectedDay }: ActivityListProps) {
                   variant="ghost" 
                   size="icon" 
                   className="h-8 w-8"
-                  onClick={() => onRemove(row.original.endDate)}
+                  onClick={() => onRemove(row.original.endDate, row.original.activityId)}
                 >
                   <Trash2 className="h-4 w-4" />
                   <span className="sr-only">Delete</span>
