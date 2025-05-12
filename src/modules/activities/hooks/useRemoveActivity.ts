@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { removeActivity } from "../services/activityService"
+import { removeActivity } from "../services/activitiesService"
 
 export const useRemoveActivity = () => {
   const queryClient = useQueryClient()

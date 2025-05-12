@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchActivities } from "../services/activityService";
+import { fetchActivities } from "../services/activitiesService";
 
 export const useActivities = (selectedDay?: string) => {
   return useQuery({
