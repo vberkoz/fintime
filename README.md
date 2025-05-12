@@ -1,18 +1,58 @@
-
+ 
 # FinTime App
 
-A financial time management application built with React, TypeScript, and Vite.
+A comprehensive financial time tracking application built with modern web technologies.
 
 ## Overview
 
-FinTime is a web application designed to help users manage their financial activities and track time spent on different financial tasks.
+FinTime is a web application designed to help users track and manage their time spent on activities. It provides a clean, intuitive interface for recording daily activities, viewing monthly summaries, and categorizing tasks.
+
+## Features
+
+- **Daily Activity Tracking**: Log and manage your activities with start and end times
+- **Duration Calculation**: Automatic calculation of time spent on each activity
+- **Monthly Overview**: View and analyze your activities on a monthly basis
+- **Category Management**: Organize activities by categories
+- **User Profiles**: Personalized user experience
+- **Responsive Design**: Works on desktop and mobile devices
 
 ## Technologies
 
-- React 19
-- TypeScript
-- Vite
-- ESLint
+- **Frontend Framework**: React 19
+- **Language**: TypeScript
+- **Build Tool**: Vite
+- **Routing**: TanStack Router (React Router v7)
+- **State Management**: TanStack Query (React Query)
+- **Form Handling**: TanStack Form with Zod validation
+- **UI Components**: 
+  - Radix UI primitives
+  - Custom UI components
+  - Tailwind CSS for styling
+- **Data Visualization**: Recharts
+- **Icons**: Lucide React
+- **Date Handling**: date-fns
+- **Code Quality**: ESLint with TypeScript support
+
+## Project Structure
+
+```
+fintime-app/
+├── public/          # Static assets
+├── src/             # Source code
+│   ├── components/  # Reusable UI components
+│   │   └── ui/      # Base UI components (cards, inputs, tooltips)
+│   ├── lib/         # Utility functions
+│   ├── modules/     # Feature modules
+│   │   └── activities/ # Activity management module
+│   │       ├── hooks/     # React hooks for activities
+│   │       ├── services/  # API services
+│   │       └── types/     # TypeScript types
+│   ├── routes/      # Application routes
+│   ├── App.tsx      # Main App component
+│   └── main.tsx     # Entry point
+├── index.html       # HTML template
+└── vite.config.ts   # Vite configuration
+```
 
 ## Getting Started
 
@@ -43,6 +83,8 @@ npm run dev
 yarn dev
 ```
 
+The application will be available at `http://localhost:5173/`
+
 ## Available Scripts
 
 - `npm run dev` - Start the development server
@@ -50,26 +92,34 @@ yarn dev
 - `npm run lint` - Run ESLint
 - `npm run preview` - Preview the production build locally
 
-## Project Structure
+## API Integration
 
-```
-fintime-app/
-├── public/          # Static assets
-├── src/             # Source code
-│   ├── assets/      # Images, fonts, etc.
-│   ├── components/  # React components
-│   ├── pages/       # Page components
-│   ├── styles/      # Global styles
-│   ├── App.tsx      # Main App component
-│   └── main.tsx     # Entry point
-├── index.html       # HTML template
-└── vite.config.ts   # Vite configuration
-```
+The application is designed to connect to a backend API. The base URL can be configured using the `VITE_API_BASE_URL` environment variable.
+
+## Architecture
+
+FinTime follows a modular architecture:
+
+- **Components**: Reusable UI elements
+- **Modules**: Feature-specific code organized by domain
+- **Routes**: Page definitions using TanStack Router
+- **Services**: API communication layer
+- **Hooks**: Custom React hooks for state management and business logic
 
 ## Contributing
 
-[Instructions for contributing to the project]
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
 [License information]
+
+## Acknowledgments
+
+- Built with [React](https://react.dev/)
+- UI components inspired by [shadcn/ui](https://ui.shadcn.com/)
+- Routing powered by [TanStack Router](https://tanstack.com/router)
