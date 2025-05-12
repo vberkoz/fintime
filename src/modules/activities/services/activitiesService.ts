@@ -1,6 +1,6 @@
 import type { Activity } from "../types";
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
 
 export const fetchActivities = async (selectedDay?: string): Promise<Activity[]> => {
     if (!selectedDay) {
@@ -62,9 +62,9 @@ export const createActivity = async (activity: Activity): Promise<Activity> => {
 };
 
 // Remove an activity
-export const removeActivity = async (endDate: string): Promise<Activity> => {
+export const removeActivity = async ({ endDate, activityId }: { endDate: string, activityId: string }): Promise<Activity> => {
     try {
-        const response = await fetch(`${apiBaseUrl}/api/activities/123/day/${endDate}`, {
+        const response = await fetch(`${apiBaseUrl}/api/activities/123/${endDate}/${activityId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
