@@ -1,6 +1,8 @@
 import type { Activity } from "../types";
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
+const apiBaseUrl = import.meta.env.DEV
+    ? import.meta.env.VITE_API_BASE_URL
+    : "";
 
 export const fetchActivities = async (selectedDay?: string): Promise<Activity[]> => {
     if (!selectedDay) {

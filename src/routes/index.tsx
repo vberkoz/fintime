@@ -14,10 +14,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
 export const Route = createFileRoute("/")({
-    component: Index,
+    component: Daily,
 });
 
-function Index() {
+function Daily() {
     const date = new Date().toLocaleDateString('en-CA'); // Returns YYYY-MM-DD format
     
     const [isDialogOpen, setIsDialogOpen] = useState(false);
