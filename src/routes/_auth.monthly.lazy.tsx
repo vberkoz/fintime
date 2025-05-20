@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input'
-import { createFileRoute } from '@tanstack/react-router'
+import { createLazyFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/monthly')({
+export const Route = createLazyFileRoute('/_auth/monthly')({
   component: Monthly,
 })
 

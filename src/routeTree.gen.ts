@@ -8,139 +8,180 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as SettingsImport } from './routes/settings'
-import { Route as ProfileImport } from './routes/profile'
-import { Route as MonthlyImport } from './routes/monthly'
-import { Route as CategoriesImport } from './routes/categories'
-import { Route as IndexImport } from './routes/index'
+import { Route as AuthImport } from './routes/_auth'
+
+// Create Virtual Routes
+
+const AuthIndexLazyImport = createFileRoute('/_auth/')()
+const AuthSettingsLazyImport = createFileRoute('/_auth/settings')()
+const AuthProfileLazyImport = createFileRoute('/_auth/profile')()
+const AuthMonthlyLazyImport = createFileRoute('/_auth/monthly')()
+const AuthCategoriesLazyImport = createFileRoute('/_auth/categories')()
 
 // Create/Update Routes
 
-const SettingsRoute = SettingsImport.update({
-  id: '/settings',
-  path: '/settings',
+const AuthRoute = AuthImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProfileRoute = ProfileImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const MonthlyRoute = MonthlyImport.update({
-  id: '/monthly',
-  path: '/monthly',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const CategoriesRoute = CategoriesImport.update({
-  id: '/categories',
-  path: '/categories',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const IndexRoute = IndexImport.update({
+const AuthIndexLazyRoute = AuthIndexLazyImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
+  getParentRoute: () => AuthRoute,
+} as any).lazy(() => import('./routes/_auth.index.lazy').then((d) => d.Route))
+
+const AuthSettingsLazyRoute = AuthSettingsLazyImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthRoute,
+} as any).lazy(() =>
+  import('./routes/_auth.settings.lazy').then((d) => d.Route),
+)
+
+const AuthProfileLazyRoute = AuthProfileLazyImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthRoute,
+} as any).lazy(() => import('./routes/_auth.profile.lazy').then((d) => d.Route))
+
+const AuthMonthlyLazyRoute = AuthMonthlyLazyImport.update({
+  id: '/monthly',
+  path: '/monthly',
+  getParentRoute: () => AuthRoute,
+} as any).lazy(() => import('./routes/_auth.monthly.lazy').then((d) => d.Route))
+
+const AuthCategoriesLazyRoute = AuthCategoriesLazyImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => AuthRoute,
+} as any).lazy(() =>
+  import('./routes/_auth.categories.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
-    '/categories': {
-      id: '/categories'
+    '/_auth/categories': {
+      id: '/_auth/categories'
       path: '/categories'
       fullPath: '/categories'
-      preLoaderRoute: typeof CategoriesImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthCategoriesLazyImport
+      parentRoute: typeof AuthImport
     }
-    '/monthly': {
-      id: '/monthly'
+    '/_auth/monthly': {
+      id: '/_auth/monthly'
       path: '/monthly'
       fullPath: '/monthly'
-      preLoaderRoute: typeof MonthlyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthMonthlyLazyImport
+      parentRoute: typeof AuthImport
     }
-    '/profile': {
-      id: '/profile'
+    '/_auth/profile': {
+      id: '/_auth/profile'
       path: '/profile'
       fullPath: '/profile'
-      preLoaderRoute: typeof ProfileImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthProfileLazyImport
+      parentRoute: typeof AuthImport
     }
-    '/settings': {
-      id: '/settings'
+    '/_auth/settings': {
+      id: '/_auth/settings'
       path: '/settings'
       fullPath: '/settings'
-      preLoaderRoute: typeof SettingsImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthSettingsLazyImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/': {
+      id: '/_auth/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthIndexLazyImport
+      parentRoute: typeof AuthImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AuthRouteChildren {
+  AuthCategoriesLazyRoute: typeof AuthCategoriesLazyRoute
+  AuthMonthlyLazyRoute: typeof AuthMonthlyLazyRoute
+  AuthProfileLazyRoute: typeof AuthProfileLazyRoute
+  AuthSettingsLazyRoute: typeof AuthSettingsLazyRoute
+  AuthIndexLazyRoute: typeof AuthIndexLazyRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthCategoriesLazyRoute: AuthCategoriesLazyRoute,
+  AuthMonthlyLazyRoute: AuthMonthlyLazyRoute,
+  AuthProfileLazyRoute: AuthProfileLazyRoute,
+  AuthSettingsLazyRoute: AuthSettingsLazyRoute,
+  AuthIndexLazyRoute: AuthIndexLazyRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/categories': typeof CategoriesRoute
-  '/monthly': typeof MonthlyRoute
-  '/profile': typeof ProfileRoute
-  '/settings': typeof SettingsRoute
+  '': typeof AuthRouteWithChildren
+  '/categories': typeof AuthCategoriesLazyRoute
+  '/monthly': typeof AuthMonthlyLazyRoute
+  '/profile': typeof AuthProfileLazyRoute
+  '/settings': typeof AuthSettingsLazyRoute
+  '/': typeof AuthIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/categories': typeof CategoriesRoute
-  '/monthly': typeof MonthlyRoute
-  '/profile': typeof ProfileRoute
-  '/settings': typeof SettingsRoute
+  '/categories': typeof AuthCategoriesLazyRoute
+  '/monthly': typeof AuthMonthlyLazyRoute
+  '/profile': typeof AuthProfileLazyRoute
+  '/settings': typeof AuthSettingsLazyRoute
+  '/': typeof AuthIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/categories': typeof CategoriesRoute
-  '/monthly': typeof MonthlyRoute
-  '/profile': typeof ProfileRoute
-  '/settings': typeof SettingsRoute
+  '/_auth': typeof AuthRouteWithChildren
+  '/_auth/categories': typeof AuthCategoriesLazyRoute
+  '/_auth/monthly': typeof AuthMonthlyLazyRoute
+  '/_auth/profile': typeof AuthProfileLazyRoute
+  '/_auth/settings': typeof AuthSettingsLazyRoute
+  '/_auth/': typeof AuthIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/categories' | '/monthly' | '/profile' | '/settings'
+  fullPaths: '' | '/categories' | '/monthly' | '/profile' | '/settings' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/categories' | '/monthly' | '/profile' | '/settings'
-  id: '__root__' | '/' | '/categories' | '/monthly' | '/profile' | '/settings'
+  to: '/categories' | '/monthly' | '/profile' | '/settings' | '/'
+  id:
+    | '__root__'
+    | '/_auth'
+    | '/_auth/categories'
+    | '/_auth/monthly'
+    | '/_auth/profile'
+    | '/_auth/settings'
+    | '/_auth/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  CategoriesRoute: typeof CategoriesRoute
-  MonthlyRoute: typeof MonthlyRoute
-  ProfileRoute: typeof ProfileRoute
-  SettingsRoute: typeof SettingsRoute
+  AuthRoute: typeof AuthRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  CategoriesRoute: CategoriesRoute,
-  MonthlyRoute: MonthlyRoute,
-  ProfileRoute: ProfileRoute,
-  SettingsRoute: SettingsRoute,
+  AuthRoute: AuthRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -153,27 +194,38 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/categories",
-        "/monthly",
-        "/profile",
-        "/settings"
+        "/_auth"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_auth": {
+      "filePath": "_auth.tsx",
+      "children": [
+        "/_auth/categories",
+        "/_auth/monthly",
+        "/_auth/profile",
+        "/_auth/settings",
+        "/_auth/"
+      ]
     },
-    "/categories": {
-      "filePath": "categories.tsx"
+    "/_auth/categories": {
+      "filePath": "_auth.categories.lazy.tsx",
+      "parent": "/_auth"
     },
-    "/monthly": {
-      "filePath": "monthly.tsx"
+    "/_auth/monthly": {
+      "filePath": "_auth.monthly.lazy.tsx",
+      "parent": "/_auth"
     },
-    "/profile": {
-      "filePath": "profile.tsx"
+    "/_auth/profile": {
+      "filePath": "_auth.profile.lazy.tsx",
+      "parent": "/_auth"
     },
-    "/settings": {
-      "filePath": "settings.tsx"
+    "/_auth/settings": {
+      "filePath": "_auth.settings.lazy.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/": {
+      "filePath": "_auth.index.lazy.tsx",
+      "parent": "/_auth"
     }
   }
 }

@@ -10,10 +10,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { ActivityForm, ActivityList } from "@/modules/activities";
 import type { Activity } from "@/modules/activities/types";
-import { createFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
-export const Route = createFileRoute("/")({
+export const Route = createLazyFileRoute("/_auth/")({
     component: Daily,
 });
 
