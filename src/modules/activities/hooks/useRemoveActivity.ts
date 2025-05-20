@@ -1,11 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { removeActivity } from "../services/activitiesService"
+import { useAuth } from "react-oidc-context"
 
 export const useRemoveActivity = () => {
   const queryClient = useQueryClient()
+  const auth = useAuth();
+  const accessToken = auth.user?.access_token;
   
   return useMutation({
-    mutationFn: removeActivity,
+    mutationFn: (activityData: {
+      endDate: string;
+      activityId: string;
+    }) => removeActivity(activityData, accessToken),
     onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ['activities'] })

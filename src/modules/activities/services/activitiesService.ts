@@ -4,7 +4,7 @@ const apiBaseUrl = import.meta.env.DEV
     ? import.meta.env.VITE_API_BASE_URL
     : "";
 
-export const fetchActivities = async (selectedDay?: string): Promise<Activity[]> => {
+export const fetchActivities = async (selectedDay?: string, accessToken?: string): Promise<Activity[]> => {
     if (!selectedDay) {
         return []; // Return empty array if no day is selected
     }
@@ -16,6 +16,7 @@ export const fetchActivities = async (selectedDay?: string): Promise<Activity[]>
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken || ""}`,
             },
         });
 
@@ -41,12 +42,13 @@ export const fetchActivities = async (selectedDay?: string): Promise<Activity[]>
 }
 
 // Create a new activity
-export const createActivity = async (activity: Activity): Promise<Activity> => {
+export const createActivity = async (activity: Activity, accessToken?: string): Promise<Activity> => {
     try {
         const response = await fetch(`${apiBaseUrl}/api/activities`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken || ""}`,
             },
             body: JSON.stringify({ userId: "123", endDate: activity.endDate, data: activity }),
         });
@@ -64,12 +66,13 @@ export const createActivity = async (activity: Activity): Promise<Activity> => {
 };
 
 // Remove an activity
-export const removeActivity = async ({ endDate, activityId }: { endDate: string, activityId: string }): Promise<Activity> => {
+export const removeActivity = async ({ endDate, activityId }: { endDate: string, activityId: string }, accessToken?: string): Promise<Activity> => {
     try {
         const response = await fetch(`${apiBaseUrl}/api/activities/123/${endDate}/${activityId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken || ""}`,
             },
         });
 
