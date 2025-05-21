@@ -73,7 +73,6 @@ export function ActivityList({ onEdit, selectedDay }: ActivityListProps) {
         const endTime = new Date(row.original.endDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         const duration = calculateDuration(row.original.beginDate, row.original.endDate);
         const notes = row.original.activityNotes;
-        const activityId = row.original.activityId;
         
         return (
           <Card key={row.id} className="w-full py-2 mb-4 overflow-hidden transition-all hover:shadow-md gap-0">
@@ -114,8 +113,6 @@ export function ActivityList({ onEdit, selectedDay }: ActivityListProps) {
                 </span>
                 <span className="mx-2">•</span>
                 <span>{duration}</span>
-                <span className="mx-2">•</span>
-                <span>{activityId}</span>
               </div>
               <div className="flex items-center gap-2 w-auto justify-end">
                 <Button 
