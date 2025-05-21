@@ -148,7 +148,7 @@ export const ActivityForm = ({ defaultValues, onClose, selectedDay }: ItemFormPr
 
   return (
     <form
-      className="space-y-4"
+      className="flex flex-col gap-4 px-4 pb-4 flex-1 overflow-y-auto"
       onSubmit={(e) => {
         e.preventDefault()
         e.stopPropagation()
@@ -309,11 +309,13 @@ export const ActivityForm = ({ defaultValues, onClose, selectedDay }: ItemFormPr
         )}
       />
 
+      <div className="grow"></div>
+
       <div className="text-right">
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
           children={() => (
-            <Button type="submit">Save changes</Button>
+            <Button type="submit" className="w-full">Save changes</Button>
           )}
         />
       </div>

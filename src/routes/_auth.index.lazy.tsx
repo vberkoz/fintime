@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet";
 import { ActivityForm, ActivityList } from "@/modules/activities";
 import type { Activity } from "@/modules/activities/types";
 import { createLazyFileRoute } from "@tanstack/react-router";
@@ -18,8 +18,8 @@ export const Route = createLazyFileRoute("/_auth/")({
 });
 
 function Daily() {
-    const date = new Date().toLocaleDateString('en-CA'); // Returns YYYY-MM-DD format
-    
+    const date = new Date().toLocaleDateString("en-CA"); // Returns YYYY-MM-DD format
+
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<Activity | null>(null);
     const [selectedDay, setSelectedDay] = useState(date);
@@ -42,7 +42,7 @@ function Daily() {
         <div>
             <div className="flex flex-col sm:flex-row justify-between space-y-4 mb-4">
                 <h2 className="text-2xl font-semibold">Daily Activities</h2>
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <Sheet open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <div className="flex">
                         <Input
                             id="daypicker"
@@ -52,25 +52,27 @@ function Daily() {
                             onChange={(e) => handleDayPick(e.target.value)}
                             className="w-fit mr-2"
                         />
-                        <DialogTrigger asChild>
-                            <Button onClick={() => setSelectedItem(null)}>Add Activity</Button>
-                        </DialogTrigger>
+                        <SheetTrigger asChild className="grow">
+                            <Button onClick={() => setSelectedItem(null)}>
+                                Add Activity
+                            </Button>
+                        </SheetTrigger>
                     </div>
-                    <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader>
-                            <DialogTitle>Add Activity</DialogTitle>
-                            <DialogDescription>
+                    <SheetContent className="flex flex-col">
+                        <SheetHeader>
+                            <SheetTitle>Add Activity</SheetTitle>
+                            <SheetDescription>
                                 Add your activity info here. Click save when
                                 you're done.
-                            </DialogDescription>
-                        </DialogHeader>
+                            </SheetDescription>
+                        </SheetHeader>
                         <ActivityForm
                             defaultValues={selectedItem || undefined}
                             onClose={handleCloseForm}
                             selectedDay={selectedDay}
                         />
-                    </DialogContent>
-                </Dialog>
+                    </SheetContent>
+                </Sheet>
             </div>
             <ActivityList onEdit={handleEditItem} selectedDay={selectedDay} />
         </div>
