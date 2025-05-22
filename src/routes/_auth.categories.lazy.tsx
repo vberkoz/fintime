@@ -7,7 +7,6 @@ export const Route = createLazyFileRoute('/_auth/categories')({
 function Categories() {
   return (
     <div className="space-y-4">
-      <h3 className="text-3xl text-zinc-800 leading-8 mb-4">Categories</h3>
     </div>
   )
 }

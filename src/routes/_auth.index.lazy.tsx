@@ -40,8 +40,7 @@ function Daily() {
 
     return (
         <div>
-            <div className="flex flex-col sm:flex-row justify-between space-y-4 mb-4">
-                <h2 className="text-2xl font-semibold">Daily Activities</h2>
+            <div className="flex flex-col sm:flex-row justify-between mb-2">
                 <Sheet open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <div className="flex">
                         <Input
