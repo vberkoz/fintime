@@ -5,7 +5,8 @@ import { useAuth } from "react-oidc-context"
 export const useCreateActivity = () => {
   const queryClient = useQueryClient()
   const auth = useAuth();
-  const accessToken = auth.user?.access_token;
+  const accessToken = auth.user!.access_token;
+  const cognitoUsername = auth.user!.profile["cognito:username"] as string
   
   return useMutation({
     mutationFn: (activityData: {
@@ -17,7 +18,7 @@ export const useCreateActivity = () => {
       endDate: string;
       activityNotes: string;
       activityId: string;
-    }) => createActivity(activityData, accessToken),
+    }) => createActivity(activityData, accessToken, cognitoUsername),
     onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ['activities'] })

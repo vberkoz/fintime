@@ -4,12 +4,12 @@ const apiBaseUrl = import.meta.env.DEV
     ? import.meta.env.VITE_API_BASE_URL
     : "";
 
-export const fetchActivities = async (selectedDay?: string, accessToken?: string): Promise<Activity[]> => {
+export const fetchActivities = async (selectedDay: string, accessToken: string, cognitoUsername: string): Promise<Activity[]> => {
     if (!selectedDay) {
         return []; // Return empty array if no day is selected
     }
 
-    const url = `${apiBaseUrl}/api/activities/123/day/${selectedDay}`; // Append sorting parameter
+    const url = `${apiBaseUrl}/api/activities/${cognitoUsername}/day/${selectedDay}`; // Append sorting parameter
 
     try {
         const response = await fetch(url, {
@@ -42,7 +42,7 @@ export const fetchActivities = async (selectedDay?: string, accessToken?: string
 }
 
 // Create a new activity
-export const createActivity = async (activity: Activity, accessToken?: string): Promise<Activity> => {
+export const createActivity = async (activity: Activity, accessToken: string, cognitoUsername: string): Promise<Activity> => {
     try {
         const response = await fetch(`${apiBaseUrl}/api/activities`, {
             method: 'POST',
@@ -50,7 +50,7 @@ export const createActivity = async (activity: Activity, accessToken?: string): 
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken || ""}`,
             },
-            body: JSON.stringify({ userId: "123", endDate: activity.endDate, data: activity }),
+            body: JSON.stringify({ userId: cognitoUsername, endDate: activity.endDate, data: activity }),
         });
 
         if (!response.ok) {
@@ -66,9 +66,9 @@ export const createActivity = async (activity: Activity, accessToken?: string): 
 };
 
 // Remove an activity
-export const removeActivity = async ({ endDate, activityId }: { endDate: string, activityId: string }, accessToken?: string): Promise<Activity> => {
+export const removeActivity = async ({ endDate, activityId }: { endDate: string, activityId: string }, accessToken: string, cognitoUsername: string): Promise<Activity> => {
     try {
-        const response = await fetch(`${apiBaseUrl}/api/activities/123/${endDate}/${activityId}`, {
+        const response = await fetch(`${apiBaseUrl}/api/activities/${cognitoUsername}/${endDate}/${activityId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

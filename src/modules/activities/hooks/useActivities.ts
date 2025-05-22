@@ -2,13 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchActivities } from "../services/activitiesService";
 import { useAuth } from "react-oidc-context";
 
-export const useActivities = (selectedDay?: string) => {
+export const useActivities = (selectedDay: string) => {
   const auth = useAuth();
-  const accessToken = auth.user?.access_token;
+  const accessToken = auth.user!.access_token;
+  const cognitoUsername = auth.user!.profile["cognito:username"] as string
 
   return useQuery({
     queryKey: ['activities', selectedDay],
-    queryFn: () => fetchActivities(selectedDay, accessToken),
+    queryFn: () => fetchActivities(selectedDay, accessToken, cognitoUsername),
     // Don't retry on "No activities" message
     retry: (failureCount, error) => {
       // Check if the error is our expected "No activities" message

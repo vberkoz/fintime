@@ -5,13 +5,14 @@ import { useAuth } from "react-oidc-context"
 export const useRemoveActivity = () => {
   const queryClient = useQueryClient()
   const auth = useAuth();
-  const accessToken = auth.user?.access_token;
+  const accessToken = auth.user!.access_token;
+  const cognitoUsername = auth.user!.profile["cognito:username"] as string
   
   return useMutation({
     mutationFn: (activityData: {
       endDate: string;
       activityId: string;
-    }) => removeActivity(activityData, accessToken),
+    }) => removeActivity(activityData, accessToken, cognitoUsername),
     onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ['activities'] })
