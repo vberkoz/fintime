@@ -1,4 +1,5 @@
 import { useForm, type AnyFieldApi } from "@tanstack/react-form"
+import { Loader2 } from "lucide-react"
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -250,7 +251,7 @@ export const ActivityForm = ({ defaultValues, onClose, selectedDay }: ItemFormPr
       <form.Field
         name="beginDate"
         children={(field) => (
-          <div className="space-y-2 w-fit">
+          <div className="space-y-2">
             <Label htmlFor={field.name} className="font-medium">
               Begin Date & Time
             </Label>
@@ -271,7 +272,7 @@ export const ActivityForm = ({ defaultValues, onClose, selectedDay }: ItemFormPr
       <form.Field
         name="endDate"
         children={(field) => (
-          <div className="space-y-2 w-fit">
+          <div className="space-y-2">
             <Label htmlFor={field.name} className="font-medium">
               End Date & Time
             </Label>
@@ -314,8 +315,21 @@ export const ActivityForm = ({ defaultValues, onClose, selectedDay }: ItemFormPr
       <div className="text-right">
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
-          children={() => (
-            <Button type="submit" className="w-full">Save changes</Button>
+          children={([canSubmit, isSubmitting]) => (
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={!canSubmit || isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </>
+              ) : (
+                "Save changes"
+              )}
+            </Button>
           )}
         />
       </div>

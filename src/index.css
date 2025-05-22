@@ -239,3 +239,9 @@
 
   --sidebar-ring: oklch(0.552 0.016 285.938);
 }
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 24px;
+  margin: 0;
+}
