@@ -7,7 +7,8 @@ export const Route = createLazyFileRoute('/_auth/monthly')({
 
 function Monthly() {
   return (
-    <div className="space-y-4">
+    <div className="p-2">
+      Monthly
       <Input type="month" className="w-fit mr-2" />
     </div>
   )

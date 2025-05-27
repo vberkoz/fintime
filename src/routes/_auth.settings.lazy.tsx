@@ -6,7 +6,8 @@ export const Route = createLazyFileRoute('/_auth/settings')({
 
 function Settings() {
   return (
-    <div className="space-y-4">
+    <div className="p-2">
+      Settings
     </div>
   )
 }

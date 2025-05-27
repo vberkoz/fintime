@@ -39,7 +39,7 @@ function Daily() {
     };
 
     return (
-        <div>
+        <div className="p-2">
             <div className="flex flex-col sm:flex-row justify-between mb-2">
                 <Sheet open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <div className="flex">

@@ -70,7 +70,7 @@ export function ActivityList({ onEdit, selectedDay }: ActivityListProps) {
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center min-h-[calc(100vh-104px)]">
+            <div className="flex items-center justify-center">
                 <div className="flex flex-col items-center justify-center">
                     <span className="flex text-left font-semibold items-center">
                         Please wait
@@ -83,9 +83,9 @@ export function ActivityList({ onEdit, selectedDay }: ActivityListProps) {
 
     if (!activities || activities.length === 0) {
         return (
-            <div className="flex items-center justify-center min-h-[calc(100vh-104px)]">
+            <div className="flex items-center justify-center">
                 <div className="flex flex-col items-center justify-center">
-                    <span className="text-center text-muted-foreground">
+                    <span className="flex text-left items-center">
                         No activities for this day
                     </span>
                 </div>

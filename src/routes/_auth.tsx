@@ -1,4 +1,4 @@
-import Navbar from "@/components/NavBar";
+import NavBar from "@/components/NavBar";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -35,7 +35,7 @@ function AuthLayout() {
     if (auth.isAuthenticated) {
         return (
             <>
-                <Navbar />
+                <NavBar />
                 <Outlet />
             </>
         );
