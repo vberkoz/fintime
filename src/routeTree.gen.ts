@@ -22,6 +22,7 @@ const AuthSettingsLazyImport = createFileRoute('/_auth/settings')()
 const AuthProfileLazyImport = createFileRoute('/_auth/profile')()
 const AuthMonthlyLazyImport = createFileRoute('/_auth/monthly')()
 const AuthCategoriesLazyImport = createFileRoute('/_auth/categories')()
+const AuthBillingLazyImport = createFileRoute('/_auth/billing')()
 
 // Create/Update Routes
 
@@ -64,6 +65,12 @@ const AuthCategoriesLazyRoute = AuthCategoriesLazyImport.update({
   import('./routes/_auth.categories.lazy').then((d) => d.Route),
 )
 
+const AuthBillingLazyRoute = AuthBillingLazyImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => AuthRoute,
+} as any).lazy(() => import('./routes/_auth.billing.lazy').then((d) => d.Route))
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -74,6 +81,13 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
+    }
+    '/_auth/billing': {
+      id: '/_auth/billing'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof AuthBillingLazyImport
+      parentRoute: typeof AuthImport
     }
     '/_auth/categories': {
       id: '/_auth/categories'
@@ -116,6 +130,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AuthRouteChildren {
+  AuthBillingLazyRoute: typeof AuthBillingLazyRoute
   AuthCategoriesLazyRoute: typeof AuthCategoriesLazyRoute
   AuthMonthlyLazyRoute: typeof AuthMonthlyLazyRoute
   AuthProfileLazyRoute: typeof AuthProfileLazyRoute
@@ -124,6 +139,7 @@ interface AuthRouteChildren {
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
+  AuthBillingLazyRoute: AuthBillingLazyRoute,
   AuthCategoriesLazyRoute: AuthCategoriesLazyRoute,
   AuthMonthlyLazyRoute: AuthMonthlyLazyRoute,
   AuthProfileLazyRoute: AuthProfileLazyRoute,
@@ -135,6 +151,7 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 export interface FileRoutesByFullPath {
   '': typeof AuthRouteWithChildren
+  '/billing': typeof AuthBillingLazyRoute
   '/categories': typeof AuthCategoriesLazyRoute
   '/monthly': typeof AuthMonthlyLazyRoute
   '/profile': typeof AuthProfileLazyRoute
@@ -143,6 +160,7 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
+  '/billing': typeof AuthBillingLazyRoute
   '/categories': typeof AuthCategoriesLazyRoute
   '/monthly': typeof AuthMonthlyLazyRoute
   '/profile': typeof AuthProfileLazyRoute
@@ -153,6 +171,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_auth': typeof AuthRouteWithChildren
+  '/_auth/billing': typeof AuthBillingLazyRoute
   '/_auth/categories': typeof AuthCategoriesLazyRoute
   '/_auth/monthly': typeof AuthMonthlyLazyRoute
   '/_auth/profile': typeof AuthProfileLazyRoute
@@ -162,12 +181,20 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/categories' | '/monthly' | '/profile' | '/settings' | '/'
+  fullPaths:
+    | ''
+    | '/billing'
+    | '/categories'
+    | '/monthly'
+    | '/profile'
+    | '/settings'
+    | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/categories' | '/monthly' | '/profile' | '/settings' | '/'
+  to: '/billing' | '/categories' | '/monthly' | '/profile' | '/settings' | '/'
   id:
     | '__root__'
     | '/_auth'
+    | '/_auth/billing'
     | '/_auth/categories'
     | '/_auth/monthly'
     | '/_auth/profile'
@@ -200,12 +227,17 @@ export const routeTree = rootRoute
     "/_auth": {
       "filePath": "_auth.tsx",
       "children": [
+        "/_auth/billing",
         "/_auth/categories",
         "/_auth/monthly",
         "/_auth/profile",
         "/_auth/settings",
         "/_auth/"
       ]
+    },
+    "/_auth/billing": {
+      "filePath": "_auth.billing.lazy.tsx",
+      "parent": "/_auth"
     },
     "/_auth/categories": {
       "filePath": "_auth.categories.lazy.tsx",
